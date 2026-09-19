@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.env*
+.DS_Store
+*.log
+.vercel
+
+# local-only backups (not needed to build the site)
+_social-source
+components/sections/_backup

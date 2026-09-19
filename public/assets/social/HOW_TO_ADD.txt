@@ -1,0 +1,19 @@
+DROP YOUR DOWNLOADED CREATIVES HERE
+===================================
+
+Copy the contents of your two downloaded folders into these two subfolders:
+
+  \aluminium\    ->  everything from @jindalaluminium
+  \naturecure\   ->  everything from @jindalnaturecure
+
+You do NOT need to rename anything. Put statics, videos and carousel images
+in as-is. For a carousel (multi-image post), keep its images together and
+name them so they sort in order, e.g.:
+      post3_1.jpg, post3_2.jpg, post3_3.jpg
+(any shared prefix + a number works).
+
+Supported best: .jpg .png .webp (images) and .mp4 (video).
+If you have .mov or .heic files, drop them in anyway — I'll convert them.
+
+When done, tell me "added" and I'll read the folders and build the gallery
+to show images, videos and carousels correctly.

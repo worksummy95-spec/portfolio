@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --font-serif / --font-sans / --font-mono are injected on <html> by next/font */
+:root{ --ease:cubic-bezier(.16,1,.3,1); }
+
+*{box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  background:#12100f;color:#f2ece4;font-family:var(--font-sans);
+  line-height:1.62;overflow-x:hidden;
+  font-feature-settings:"kern","liga","calt";
+  letter-spacing:-0.006em;
+}
+body,a,button{cursor:default}
+a{color:inherit;text-decoration:none}
+::selection{background:#d64f61;color:#12100f}
+:focus-visible{outline:2px solid #d64f61;outline-offset:3px}
+
+/* ---- Display typography ---- */
+.font-serif{font-optical-sizing:auto;font-feature-settings:"kern","liga","dlig","ss01";letter-spacing:-0.018em}
+h1,h2{letter-spacing:-0.028em}
+.tabular-nums{font-variant-numeric:tabular-nums}
+.text-balance{text-wrap:balance}
+.text-pretty{text-wrap:pretty}
+
+/* ---- Lenis smooth scroll ---- */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+
+/* ---- faint editorial grain ---- */
+body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:140px}
+
+/* ---- utilities ---- */
+.hairline{height:1px;background:linear-gradient(90deg,transparent,rgba(242,236,228,.16),transparent)}
+.text-glow{text-shadow:0 0 60px rgba(209,73,91,.25)}
+.mask-fade-r{-webkit-mask-image:linear-gradient(90deg,#000 70%,transparent);mask-image:linear-gradient(90deg,#000 70%,transparent)}
+
+/* marquee */
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-track{display:flex;width:max-content;animation:marquee 32s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+
+/* sequence flow — a soft light travels through the steps, looping */
+@keyframes seqGlow{0%,16%,100%{opacity:0}5%{opacity:1}}
+.seq-chip{position:relative;isolation:isolate}
+.seq-chip::before{content:"";position:absolute;inset:-1px;z-index:-1;border-radius:9999px;background:rgba(214,79,97,0.12);box-shadow:0 0 22px -4px rgba(214,79,97,0.5);opacity:0;pointer-events:none;animation:seqGlow 3.4s ease-in-out var(--seq-delay,0s) infinite}
+.seq-chip:hover::before{opacity:0}
+
+/* video-hero (/v2) intro animations */
+@keyframes hvFadeSlideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hvFadeIn{from{opacity:0}to{opacity:1}}
+.hv-word{animation:hvFadeSlideUp .7s cubic-bezier(.16,1,.3,1) both}
+.hv-fade{animation:hvFadeIn .9s ease both}
+.hv-video{animation:hvFadeIn 1.6s ease forwards}
+
+/* image blur-up */
+.img-load{filter:blur(16px);transform:scale(1.04);transition:filter .9s var(--ease),transform .9s var(--ease)}
+.img-ready{filter:blur(0);transform:scale(1)}
+
+/* custom accent scrollbar */
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#0c0b0a}
+::-webkit-scrollbar-thumb{background:#2a2522;border-radius:99px;border:2px solid #0c0b0a}
+::-webkit-scrollbar-thumb:hover{background:#d64f61}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important;animation-iteration-count:1!important}
+  .marquee-track{animation:none}
+  body::after{display:none}
+}
