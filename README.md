@@ -1,68 +1,74 @@
-# Sumanth Manjunath — Portfolio (Next.js)
+# Sumanth Manjunath — Portfolio v2 (Next.js)
 
-Award-grade editorial portfolio for a Brand & Corporate Communications manager.
-Dark "Warm Ink" palette, Fraunces + Inter, GSAP + Lenis smooth scroll, Framer Motion
-transitions, fully responsive, SEO-ready, statically prerendered.
+Second-generation portfolio: **Digital Strategy & Transformation**, with brand and
+communications as a supporting pillar. Built as a controlled evolution of the live
+portfolio: same Warm Ink palette, Fraunces / Inter / JetBrains Mono, Lenis smooth
+scroll, Framer Motion reveals, and case-study engine. New information architecture,
+positioning, case studies, systems layer, routing/SEO and production hardening.
+
+This is a **separate project**. It does not share a Vercel project, domain or DNS
+with the live site at sumanthm.co.in.
 
 ## Stack
-- **Next.js 15** (App Router, static export-friendly, per-case SSG)
-- **React 18** + **TypeScript** (strict)
-- **Tailwind CSS 3.4** — design tokens in `tailwind.config.ts`
-- **Framer Motion** — reveals, kinetic headings, page transitions, cursor work-preview
-- **GSAP + Lenis** — buttery smooth scroll + scroll-progress
+- Next.js 15 (App Router, fully static: 6 SSG case pages) · React 18 · TypeScript (strict)
+- Tailwind CSS 3.4 (tokens in `tailwind.config.ts`)
+- Framer Motion (reveals, kinetic headings, transitions) · Lenis (smooth scroll)
 - All motion respects `prefers-reduced-motion`
 
-## Run locally
+## Run
 ```bash
-# 1. (only if a partial node_modules exists) start clean:
-rm -rf node_modules package-lock.json install.log
-
-# 2. install
-npm install
-
-# 3. dev server → http://localhost:3000
-npm run dev
-
-# 4. production build (validated: 11/11 pages prerender clean)
+npm ci
+npm run dev          # http://localhost:3000
+npm run lint
+npx tsc --noEmit
 npm run build && npm start
 ```
-
-## Deploy (Vercel)
-```bash
-npm i -g vercel
-vercel        # preview
-vercel --prod # production
-```
-No env vars needed. Vercel auto-detects Next.js.
 
 ## Structure
 ```
 app/
-  layout.tsx            fonts, metadata/OG, providers, nav+footer
-  page.tsx              homepage composition
-  template.tsx          route page-transition
-  work/[slug]/page.tsx  case route (generateStaticParams + metadata)
-  sitemap.ts robots.ts  SEO
-  globals.css           tokens, Lenis CSS, grain, reduced-motion
-lib/content.ts          SINGLE SOURCE OF TRUTH (all copy + case data + asset paths)
+  layout.tsx              metadata (canonical sumanthm.co.in), fonts, providers
+  page.tsx                homepage + Person/WebSite JSON-LD
+  work/[slug]/page.tsx    case route: static params, per-case metadata, CreativeWork + Breadcrumb JSON-LD
+  sitemap.ts robots.ts    SEO (custom domain only)
+  icon.svg apple-icon.png favicon set
+lib/content.ts            SINGLE SOURCE OF TRUTH — copy, cases, systems, redirects
+next.config.ts            301/308 legacy redirects (from lib/content.ts) + security headers
 components/
-  providers/  SmoothScroll (Lenis+GSAP), CursorPreview
-  layout/     Navbar (auto-hide), Footer
-  ui/         Reveal, KineticHeading, Shot (lightbox), Sequence, Stack, Section, Blocks
-  sections/   Hero, Manifesto, SelectedWork, Systems, Capabilities, Experience, POV, Contact
-  case/       CaseStudy (sticky chapter rail + scroll progress + next-case)
-public/assets/  real evidence only (case-01…05, global/og-image)
+  sections/  Hero · HowIWork · SelectedWork · Systems · Capabilities · Experience · POV · Contact
+  case/      CaseStudy (overview band: context/role/status/evidence + chapter rail + next case)
+  ui/        Blocks (statement, para, heading, sequence, stack, image, split, pair, wall,
+             essay, gallery, metrics, status) · Shot (lightbox) · Reveal · KineticHeading …
+  seo/       JsonLd
+public/
+  assets/cases-v2/        six text-free case cover diagrams (generated)
+  og/                     Open Graph images, 1200×630 (generated)
+scripts/
+  make-covers.py          regenerates the case covers
+  make-og.py              regenerates the OG images (needs Playwright + Chromium)
+docs/                     Blueprint + Phase 1–5 notes + v2 build/QA record
 ```
 
-## Editing content
-Everything readable/writable lives in **`lib/content.ts`** — headline, cases,
-systems, capabilities, experience, POV, contact. Case bodies are a typed block
-model (`statement | para | heading | sequence | stack | image | split | pair |
-wall | essay | coverage`) rendered by `components/ui/Blocks.tsx`, so new sections
-need no new components.
+## Homepage order
+Hero → How I Work (Diagnose / Build / Improve) → Selected Work → Operating Systems →
+Capabilities → Experience → Point of View → Contact
 
-## Guardrails baked in
-- Real assets only — no fabricated dashboards or stock imagery.
-- V4 résumé is the sole source for career facts (Zerozilla → Jindal Naturecure → Jindal Aluminium).
-- Case 01 copy: "I wasn't designing the logo. I was helping make the new brand usable."
-- Systems framed as business/operational/AI-assisted — not software engineering.
+## Routes
+| Route | Case |
+|---|---|
+| `/work/enterprise-digital-platform-governance` | 01 Enterprise Digital Platform & Website Governance |
+| `/work/digital-strategy-seo-growth` | 02 Digital Strategy, SEO & Growth |
+| `/work/digital-commerce-performance` | 03 Digital Commerce & Performance |
+| `/work/business-process-improvement-governance` | 04 Business Process Improvement & Governance |
+| `/work/digital-product-ai-adoption` | 05 Digital Product, AI & Adoption Systems |
+| `/work/brand-communications-reputation` | 06 Brand, Communications & Reputation |
+
+Permanent redirects: `/v2`, `/work/reframing-a-brand`, `/work/making-aluminium-matter`,
+`/work/public-narrative`, `/work/real-world`, `/work/digital-layer`,
+`/work/business-process-governance` → see `legacyRedirects` in `lib/content.ts`.
+
+## Evidence discipline (enforced in content)
+Framework ≠ implementation · evaluation ≠ selection · audit finding ≠ remediation ·
+planning ≠ completion · activity ≠ outcome · technical fluency ≠ software engineering.
+Status vocabulary: Built · Validated · Specified · Framework · Roadmap · Coordinated · Measured.
+Deloitte audit: **Final stage · formal closure pending**.

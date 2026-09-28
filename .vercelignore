@@ -1,3 +1,5 @@
 _social-source
 components/sections/_backup
 *.log
+scripts/.og.html
+docs

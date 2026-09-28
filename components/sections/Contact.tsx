@@ -8,7 +8,8 @@ import { ArrowUpRight } from "@/components/ui/Icon";
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative mx-auto max-w-wrap px-6 py-32 md:px-10 md:py-44">
+    <section id="contact" className="relative overflow-hidden">
+      <div className="relative mx-auto max-w-wrap px-6 py-32 md:px-10 md:py-44">
       <div aria-hidden className="pointer-events-none absolute bottom-0 left-1/2 h-[50vh] w-[80vh] -translate-x-1/2 rounded-full opacity-30 blur-[130px]"
         style={{ background: "radial-gradient(circle, rgba(214,79,97,0.16), transparent 60%)" }} />
       <div className="relative">
@@ -36,6 +37,7 @@ export default function Contact() {
             <span className="py-2.5 text-faint">{meta.location}</span>
           </div>
         </Reveal>
+      </div>
       </div>
     </section>
   );

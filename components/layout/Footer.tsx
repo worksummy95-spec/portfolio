@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { meta } from "@/lib/content";
-import { ArrowUpRight, ArrowRight } from "@/components/ui/Icon";
+import { ArrowRight } from "@/components/ui/Icon";
 
 export default function Footer() {
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -10,18 +10,16 @@ export default function Footer() {
       <div className="mx-auto max-w-wrap px-6 pt-16 md:px-10 md:pt-24">
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-md">
-            <p className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-accent">Let&rsquo;s talk</p>
-            <a href={"mailto:" + meta.email}
-              className="group mt-5 inline-flex items-center gap-3 font-serif text-2xl text-ink transition-colors hover:text-accent md:text-3xl">
-              {meta.email}
-              <ArrowUpRight className="h-5 w-5 transition-transform duration-500 ease-editorial group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </a>
+            <p className="font-serif text-2xl text-ink md:text-3xl">{meta.name}</p>
+            <p className="mt-2 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-faint">{meta.role} · {meta.location}</p>
           </div>
           <nav className="flex gap-14 font-mono text-[0.72rem] uppercase tracking-[0.16em]" aria-label="Footer">
             <div className="flex flex-col gap-3">
               <span className="text-faint">Menu</span>
+              <Link href="/#how" className="py-1 text-muted transition-colors hover:text-ink">How I Work</Link>
               <Link href="/#work" className="py-1 text-muted transition-colors hover:text-ink">Work</Link>
               <Link href="/#systems" className="py-1 text-muted transition-colors hover:text-ink">Systems</Link>
+              <Link href="/#builds" className="py-1 text-muted transition-colors hover:text-ink">Builds</Link>
               <Link href="/#experience" className="py-1 text-muted transition-colors hover:text-ink">Experience</Link>
             </div>
             <div className="flex flex-col gap-3">

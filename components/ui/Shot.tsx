@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCanAnimate } from "@/hooks/useCanAnimate";
@@ -10,20 +10,24 @@ export default function Shot({ img, className = "", priority = false, index, siz
   const [open, setOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const canAnim = useCanAnimate();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
+    const trigger = triggerRef.current;
+    closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("keydown", onKey);
     document.documentElement.style.overflow = "hidden";
-    return () => { document.removeEventListener("keydown", onKey); document.documentElement.style.overflow = ""; };
+    return () => { document.removeEventListener("keydown", onKey); document.documentElement.style.overflow = ""; trigger?.focus(); };
   }, [open]);
 
   return (
     <>
       <figure className={"group relative m-0 " + className}>
         <motion.button
-          type="button" onClick={() => setOpen(true)} aria-label={"View larger: " + img.alt}
+          ref={triggerRef} type="button" onClick={() => setOpen(true)} aria-label={"View larger: " + img.alt}
           className="relative block w-full overflow-hidden rounded-[3px] bg-panel ring-1 ring-white/[0.05] cursor-zoom-in"
           style={{ aspectRatio: img.ratio || "16/10" }}
           initial={canAnim ? { clipPath: "inset(0 0 100% 0)" } : undefined}
@@ -67,7 +71,7 @@ export default function Shot({ img, className = "", priority = false, index, siz
                 {index && <span className="text-accent">{index}</span>}
                 <span className="max-w-[60vw] truncate">{img.cap || img.alt}</span>
               </span>
-              <button onClick={() => setOpen(false)} aria-label="Close"
+              <button ref={closeRef} onClick={() => setOpen(false)} aria-label="Close image"
                 className="group flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-ink">
                 Close
                 <span className="grid h-8 w-8 place-items-center rounded-full border border-line transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-bg">
