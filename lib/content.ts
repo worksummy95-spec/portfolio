@@ -140,7 +140,9 @@ export const governanceLayer = [
 /* Things I've built: personal projects, live on Vercel. Descriptions stick to what each
    app visibly does. No user, revenue or adoption claims. */
 export type Build = {
-  name: string; kind: string; line: string; features: string[]; url: string;
+  name: string; kind: string; line: string; features: string[];
+  /** Public link. Leave out for apps with sign-ups: the card then shows "Demo on request". */
+  url?: string;
   cover: string; coverPos?: string; shots: { src: string; alt: string; mobile?: boolean }[];
 };
 const BD = "/assets/builds";
@@ -177,7 +179,7 @@ export const builds: Build[] = [
     ],
   },
   {
-    name: "ContentHub", kind: "Content operations · SaaS", url: "https://content-hub-eta-one.vercel.app/",
+    name: "ContentHub", kind: "Content operations · SaaS",
     line: "A content-operations dashboard for freelancers and agencies: scheduling, analytics, a content calendar, competitor tracking and an industry news feed.",
     features: ["Post scheduling", "Analytics", "Competitor tracker", "Tiered plans"],
     cover: `${BD}/contenthub-hero-d.jpg`,
@@ -190,7 +192,7 @@ export const builds: Build[] = [
     ],
   },
   {
-    name: "Project Ascend", kind: "Habits · gamified app", url: "https://project-ascend-livid.vercel.app/",
+    name: "Project Ascend", kind: "Habits · gamified app",
     line: "Turns everyday habits into an RPG: real actions become quests that earn XP and ranks. Sign-in with Google.",
     features: ["Quests", "XP & ranks", "Google sign-in"],
     cover: `${BD}/ascend-landing-d.jpg`,

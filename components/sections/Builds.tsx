@@ -42,10 +42,12 @@ function Gallery({ build, onClose }: { build: Build; onClose: () => void }) {
           <span className="tabular-nums text-faint">{i + 1} / {n}</span>
         </span>
         <div className="flex items-center gap-5">
-          <a href={build.url} target="_blank" rel="noreferrer"
-            className="hidden items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-ink sm:inline-flex">
-            Open live <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+          {build.url && (
+            <a href={build.url} target="_blank" rel="noreferrer"
+              className="hidden items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-ink sm:inline-flex">
+              Open live <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          )}
           <button ref={closeRef} onClick={onClose} aria-label="Close gallery"
             className="group grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition-all hover:border-accent hover:bg-accent hover:text-bg">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4" aria-hidden><path d="M6 6l12 12M18 6L6 18" /></svg>
@@ -117,10 +119,17 @@ export default function Builds() {
 
               <div className="mt-5 flex items-baseline justify-between gap-4">
                 <h3 className="m-0 font-serif text-2xl text-ink md:text-[1.9rem]">{b.name}</h3>
-                <a href={b.url} target="_blank" rel="noreferrer" aria-label={`Open ${b.name} live (opens in a new tab)`}
-                  className="group inline-flex shrink-0 items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-accentsoft">
-                  Live <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-500 ease-editorial group-hover:rotate-12" />
-                </a>
+                {b.url ? (
+                  <a href={b.url} target="_blank" rel="noreferrer" aria-label={`Open ${b.name} live (opens in a new tab)`}
+                    className="group inline-flex shrink-0 items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-accentsoft">
+                    Live <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-500 ease-editorial group-hover:rotate-12" />
+                  </a>
+                ) : (
+                  <a href="#contact" aria-label={`Ask for a demo of ${b.name}`}
+                    className="shrink-0 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-accentsoft">
+                    Demo on request
+                  </a>
+                )}
               </div>
               <p className="mt-1 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">{b.kind}</p>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted md:text-base">{b.line}</p>
