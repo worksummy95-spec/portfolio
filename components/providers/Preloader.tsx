@@ -14,7 +14,7 @@ export default function Preloader() {
     setShow(true);
     document.documentElement.style.overflow = "hidden";
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dur = reduce ? 500 : 1500;
+    const dur = reduce ? 150 : 450;
     const t0 = performance.now();
     let raf = 0;
     const tick = (t: number) => {
@@ -23,7 +23,7 @@ export default function Preloader() {
       if (p < 1) raf = requestAnimationFrame(tick);
       else {
         try { sessionStorage.setItem("sm_intro", "1"); } catch {}
-        setTimeout(() => { setShow(false); document.documentElement.style.overflow = ""; }, reduce ? 100 : 500);
+        setTimeout(() => { setShow(false); document.documentElement.style.overflow = ""; }, 50);
       }
     };
     raf = requestAnimationFrame(tick);
@@ -37,7 +37,7 @@ export default function Preloader() {
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-deep"
           initial={{ opacity: 1 }}
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
         >
           <motion.div
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
@@ -46,7 +46,7 @@ export default function Preloader() {
               Sumanth<span className="text-accent">.</span>
             </span>
             <span className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-faint">
-              Brand · Communication · Systems
+              Digital Strategy · Transformation
             </span>
           </motion.div>
           <div className="absolute bottom-10 left-0 right-0 mx-auto flex max-w-wrap items-center justify-between px-6 md:px-10">

@@ -6,7 +6,14 @@ export default function Experience() {
   const path = experience.path;
   return (
     <Section id="experience" index="05" label="Experience">
-      <Reveal><p className="mb-16 max-w-2xl font-serif text-2xl text-ink md:text-3xl">{experience.note}</p></Reveal>
+      <Reveal>
+        <div className="mb-16 max-w-2xl">
+          <p className="font-serif text-2xl text-ink md:text-3xl">{experience.note}</p>
+          {experience.about.text.map((t) => (
+            <p key={t} className="mt-5 text-base leading-relaxed text-muted md:text-lg">{t}</p>
+          ))}
+        </div>
+      </Reveal>
 
       <div className="relative border-t border-line">
         {/* timeline spine */}
@@ -21,7 +28,14 @@ export default function Experience() {
                 <h3 className="font-serif text-2xl text-ink transition-transform duration-500 ease-editorial group-hover:translate-x-1">{e.org}</h3>
                 <p className="mt-1 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-faint">{e.role}</p>
               </div>
-              <p className="text-base leading-relaxed text-muted">{e.p}</p>
+              <div>
+                <p className="text-base leading-relaxed text-muted">{e.p}</p>
+                <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Scope">
+                  {e.scope.map((s) => (
+                    <li key={s} className="rounded-full border border-line px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-faint transition-colors group-hover:text-muted">{s}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </Reveal>
         ))}
@@ -34,7 +48,7 @@ export default function Experience() {
           <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
             {path.map((p, i) => (
               <span key={i} className="flex items-center gap-2">
-                <span className={"rounded-full border px-3.5 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors " + (i === path.length - 1 ? "border-accent/60 bg-accent/[0.06] text-accent" : "border-line text-muted")}>{p}</span>
+                <span className={"rounded-full border px-3.5 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors " + (i === path.length - 1 ? "border-accent/60 bg-accent/[0.06] text-accentsoft" : "border-line text-muted")}>{p}</span>
                 {i < path.length - 1 && <span className="text-faint">→</span>}
               </span>
             ))}

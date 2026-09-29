@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Section from "@/components/ui/Section";
-import Reveal from "@/components/ui/Reveal";
 import { useCanAnimate } from "@/hooks/useCanAnimate";
-import { social, type SocialPost } from "@/lib/content";
+import type { SocialPost } from "@/lib/content";
 
 /* ---------- in-view autoplay video ---------- */
 function AutoVideo({ src, poster, className = "", muted = true, controls = false, active = true }:
@@ -21,7 +19,7 @@ function AutoVideo({ src, poster, className = "", muted = true, controls = false
     io.observe(v); return () => io.disconnect();
   }, [canAnim, active, controls]);
   return (
-    <video ref={ref} className={className} poster={poster} muted={muted} loop playsInline
+    <video ref={ref} src={src} className={className} poster={poster} muted={muted} loop playsInline
       controls={controls} autoPlay={controls} preload={controls ? "auto" : "none"} />
   );
 }
@@ -60,7 +58,7 @@ function Card({ post, i, onOpen }: { post: SocialPost; i: number; onOpen: () => 
       onMouseEnter={startCycle} onMouseLeave={stopCycle}>
 
       {/* description layer (revealed as the cover shrinks) */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-end p-5">
+      <div aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-end p-5">
         <span className="mb-1.5 font-mono text-[0.6rem] uppercase tracking-[0.16em] text-accent">{post.handle.replace("@jindal", "@")}</span>
         <h4 className="font-serif text-[0.95rem] leading-tight text-ink transition-all duration-500 ease-editorial group-hover:text-lg">{post.caption}</h4>
         {post.desc && (
@@ -71,7 +69,7 @@ function Card({ post, i, onOpen }: { post: SocialPost; i: number; onOpen: () => 
       </div>
 
       {/* cover layer (top) — shrinks + rounds on hover */}
-      <button type="button" onClick={onOpen} aria-label={"Open: " + post.caption}
+      <button type="button" onClick={onOpen} aria-label={"Open: " + post.caption + (post.desc ? ". " + post.desc : "")}
         className="absolute inset-0 cursor-pointer overflow-hidden rounded-[8px] ring-1 ring-white/[0.05] transition-[inset,border-radius] duration-[600ms] ease-editorial group-hover:bottom-[38%] group-hover:left-2.5 group-hover:right-2.5 group-hover:top-2.5 group-hover:rounded-[14px]">
         {post.kind === "video" ? (
           <AutoVideo src={post.src} poster={post.poster} className="h-full w-full object-cover" />
@@ -90,6 +88,14 @@ function Card({ post, i, onOpen }: { post: SocialPost; i: number; onOpen: () => 
 /* ---------- lightbox ---------- */
 function Lightbox({ post, onClose }: { post: SocialPost; onClose: () => void }) {
   const [idx, setIdx] = useState(0);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLElement | null>(typeof document !== "undefined" ? (document.activeElement as HTMLElement) : null);
+
+  useEffect(() => {
+    const opener = openerRef.current;
+    closeRef.current?.focus();
+    return () => { opener?.focus(); };
+  }, []);
   const canAnim = useCanAnimate();
   const slides = post.kind === "carousel" ? post.slides : null;
   const go = useCallback((d: number) => { if (slides) setIdx((v) => (v + d + slides.length) % slides.length); }, [slides]);
@@ -115,7 +121,7 @@ function Lightbox({ post, onClose }: { post: SocialPost; onClose: () => void }) 
           <span className="max-w-[50vw] truncate text-faint">{post.caption}</span>
           {slides && <span className="text-faint">· {idx + 1}/{slides.length}</span>}
         </span>
-        <button onClick={onClose} aria-label="Close"
+        <button ref={closeRef} onClick={onClose} aria-label="Close post"
           className="group flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted transition-colors hover:text-ink">
           Close
           <span className="grid h-8 w-8 place-items-center rounded-full border border-line transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-bg">
@@ -161,35 +167,17 @@ function Lightbox({ post, onClose }: { post: SocialPost; onClose: () => void }) 
   );
 }
 
-export default function SocialGrid() {
+export default function SocialWall({ posts, title }: { posts: SocialPost[]; title?: string }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <Section id="social" index="02" label="Creative & Social">
-      <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <Reveal>
-          <p className="max-w-2xl font-serif text-2xl leading-snug text-ink md:text-3xl">
-            Day-to-day brand presence — campaigns, films and social creative across two brand accounts.
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {social.handles.map((h) => (
-              <span key={h.tag} className="flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />{h.tag}
-                <span className="text-faint">· {h.years}</span>
-              </span>
-            ))}
-          </div>
-        </Reveal>
+    <div>
+      {title && <p className="mb-6 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-faint">{title}</p>}
+      <div className="gap-4 columns-2 [column-fill:balance] md:columns-3">
+        {posts.map((p, i) => <Card key={i} post={p} i={i} onOpen={() => setOpen(i)} />)}
       </div>
-
-      <div className="[column-fill:balance] gap-4 columns-2 md:columns-3 lg:columns-4">
-        {social.posts.map((p, i) => <Card key={i} post={p} i={i} onOpen={() => setOpen(i)} />)}
-      </div>
-
       <AnimatePresence>
-        {open !== null && <Lightbox post={social.posts[open]} onClose={() => setOpen(null)} />}
+        {open !== null && <Lightbox post={posts[open]} onClose={() => setOpen(null)} />}
       </AnimatePresence>
-    </Section>
+    </div>
   );
 }

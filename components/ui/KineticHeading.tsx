@@ -9,7 +9,8 @@ export default function KineticHeading({
   const Tag = as as any;
   const label = lines.join(" ");
   return (
-    <Tag className={className} aria-label={label}>
+    <Tag className={className}>
+      <span className="sr-only">{label}</span>
       {lines.map((line, i) => {
         const accent = accentLast && i === lines.length - 1;
         const accentCls = accent ? "text-accent italic" : "";

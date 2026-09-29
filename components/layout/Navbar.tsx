@@ -8,8 +8,10 @@ import { useActiveSection } from "@/hooks/useActiveSection";
 import { meta } from "@/lib/content";
 
 const links = [
+  { href: "/#how", id: "how", label: "How I Work" },
   { href: "/#work", id: "work", label: "Work" },
   { href: "/#systems", id: "systems", label: "Systems" },
+  { href: "/#builds", id: "builds", label: "Builds" },
   { href: "/#experience", id: "experience", label: "Experience" },
   { href: "/#contact", id: "contact", label: "Contact" },
 ];
@@ -35,12 +37,16 @@ export default function Navbar() {
   }, [open]);
 
   useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
     return () => { document.documentElement.style.overflow = ""; };
   }, [open]);
-
-  // /v2 provides its own in-hero navigation
-  if (pathname.startsWith("/v2")) return null;
 
   return (
     <>
@@ -48,7 +54,7 @@ export default function Navbar() {
         initial={{ y: 0 }} animate={{ y: hidden ? "-110%" : 0 }} transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         className={"fixed inset-x-0 top-0 z-50 transition-colors duration-500 " + (solid && !open ? "bg-bg/70 backdrop-blur-md" : "")}
       >
-        <nav className="mx-auto flex max-w-wrap items-center justify-between px-6 py-4 md:px-10">
+        <nav aria-label="Primary" className="mx-auto flex max-w-wrap items-center justify-between px-6 py-4 md:px-10">
           <Link href="/" onClick={() => setOpen(false)} className="group relative z-[70] font-serif text-lg tracking-tight text-ink">
             Sumanth<span className="text-accent transition-all duration-500 group-hover:tracking-[0.05em]">.</span>
           </Link>
@@ -65,7 +71,7 @@ export default function Navbar() {
               );
             })}
           </div>
-          <button aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((v) => !v)}
+          <button aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((v) => !v)}
             className="relative z-[70] flex h-10 w-10 flex-col items-center justify-center gap-1.5 sm:hidden">
             <motion.span animate={{ rotate: open ? 45 : 0, y: open ? 4 : 0 }} className="block h-px w-6 bg-ink" />
             <motion.span animate={{ rotate: open ? -45 : 0, y: open ? -3 : 0 }} className="block h-px w-6 bg-ink" />
@@ -78,6 +84,7 @@ export default function Navbar() {
         {open && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}
+            id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu"
             className="fixed inset-0 z-[60] flex flex-col justify-center bg-deep px-8 sm:hidden">
             <nav className="flex flex-col gap-6">
               {links.map((l, i) => (

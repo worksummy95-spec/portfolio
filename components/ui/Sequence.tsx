@@ -13,11 +13,11 @@ export default function Sequence({ items, loop = false }:
             viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.06 }}
             style={loop ? ({ ["--seq-delay" as any]: `${((i * 3.4) / n).toFixed(2)}s` }) : undefined}
             className={
-              "cursor-default rounded-full border px-3 py-2 font-mono text-[0.72rem] uppercase tracking-[0.16em] transition-colors duration-300 hover:border-accent hover:bg-accent/[0.08] hover:text-accent " +
+              "cursor-default rounded-full border px-3 py-2 font-mono text-[0.72rem] uppercase tracking-[0.16em] transition-colors duration-300 hover:border-accent hover:bg-accent/[0.08] hover:text-accentsoft " +
               (loop
                 ? "seq-chip border-line text-muted"
                 : it.on
-                ? "border-accent/60 bg-accent/[0.06] text-accent"
+                ? "border-accent/60 bg-accent/[0.06] text-accentsoft"
                 : "border-line text-muted")
             }
           >
